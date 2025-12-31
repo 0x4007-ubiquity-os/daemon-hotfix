@@ -7,7 +7,7 @@
     "check_run.completed",
     "check_suite.completed"
   ],
-  "skipBotEvents": true,
+  "skipBotEvents": false,
   "configuration": {
     "type": "object",
     "properties": {
@@ -56,4 +56,3 @@
   "homepage_url": "",
   "short_name": "0x4007-ubiquity-os/daemon-hotfix@codex/concurrent-20251222"
 }
-
