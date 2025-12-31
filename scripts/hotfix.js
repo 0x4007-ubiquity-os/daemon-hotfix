@@ -245,6 +245,10 @@ function upsertIssue({ repo, title, body, comment, labels }) {
   const createArgs = ["issue", "create", "--repo", repo, "--title", title, "--body", body];
   for (const label of labels) createArgs.push("--label", label);
   const created = ghTry(createArgs);
+  if (!created.ok && labels.length) {
+    const createdNoLabels = ghTry(["issue", "create", "--repo", repo, "--title", title, "--body", body]);
+    if (createdNoLabels.ok) return { action: "created", url: createdNoLabels.stdout };
+  }
   if (!created.ok) {
     return { action: "failed", error: created.stderr };
   }
@@ -308,7 +312,7 @@ function main() {
     const result = upsertIssue({ repo: targetRepo, title, body, comment, labels: issueLabels });
     if (result.action === "failed") {
       console.error(`Failed to create/update issue in ${targetRepo}: ${result.error}`);
-      process.exit(1);
+      return;
     }
     console.log(`${result.action} issue in ${targetRepo}`);
     return;
@@ -340,7 +344,7 @@ function main() {
     const result = upsertIssue({ repo: targetRepo, title, body, comment, labels: issueLabels });
     if (result.action === "failed") {
       console.error(`Failed to create/update issue in ${targetRepo}: ${result.error}`);
-      process.exit(1);
+      return;
     }
     console.log(`${result.action} issue in ${targetRepo}`);
     return;
