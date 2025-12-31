@@ -1,0 +1,59 @@
+{
+  "name": "daemon-hotfix",
+  "description": "Triage UbiquityOS plugin dispatch/workflow failures and create/update issues (optional PRs) with guardrails.",
+  "ubiquity:listeners": [
+    "kernel.plugin_error",
+    "workflow_run.completed",
+    "check_run.completed",
+    "check_suite.completed"
+  ],
+  "skipBotEvents": true,
+  "configuration": {
+    "type": "object",
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "modes": {
+        "type": "array",
+        "default": ["issue"],
+        "items": {
+          "type": "string",
+          "enum": ["issue", "pr"]
+        }
+      },
+      "allowlistRepos": {
+        "type": "array",
+        "default": [],
+        "items": {
+          "type": "string"
+        }
+      },
+      "issueLabels": {
+        "type": "array",
+        "default": [],
+        "items": {
+          "type": "string"
+        }
+      },
+      "dedupeWindowHours": {
+        "type": "number",
+        "default": 24
+      },
+      "maxBodyChars": {
+        "type": "integer",
+        "default": 65000
+      },
+      "riskPolicy": {
+        "type": "object",
+        "default": {},
+        "additionalProperties": true
+      }
+    },
+    "additionalProperties": true
+  },
+  "homepage_url": "",
+  "short_name": "0x4007-ubiquity-os/daemon-hotfix@codex/concurrent-20251222"
+}
+

@@ -1,0 +1,61 @@
+name: "@0x4007-ubiquity-os/daemon-hotfix"
+
+on:
+  workflow_dispatch:
+    inputs:
+      stateId:
+        description: "State Id"
+      eventName:
+        description: "Event Name"
+      eventPayload:
+        description: "Event Payload"
+      settings:
+        description: "Settings"
+      authToken:
+        description: "Auth Token"
+      ubiquityKernelToken:
+        description: "Kernel attestation token (optional)"
+      kernelPublicKey:
+        description: "Kernel public key PEM for signature verification (optional)"
+        required: false
+      ref:
+        description: "Ref"
+      signature:
+        description: "Signature sent from the Kernel"
+      command:
+        description: "Command"
+
+jobs:
+  compute:
+    name: "daemon-hotfix"
+    runs-on: ubuntu-latest
+    permissions: write-all
+    timeout-minutes: 30
+
+    steps:
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Decompress event payload
+        uses: ubiquity-os/compress-action@main
+        id: eventPayload
+        with:
+          data: ${{ inputs.eventPayload }}
+          mode: decompress
+
+      - name: Mask tokens
+        run: |
+          echo "::add-mask::${{ inputs.authToken }}"
+
+      - name: Run
+        env:
+          GH_TOKEN: ${{ inputs.authToken }}
+          EVENT_NAME: ${{ inputs.eventName }}
+          EVENT_PAYLOAD: ${{ steps.eventPayload.outputs.result }}
+          SETTINGS: ${{ inputs.settings }}
+          STATE_ID: ${{ inputs.stateId }}
+        run: |
+          node scripts/hotfix.js
+
