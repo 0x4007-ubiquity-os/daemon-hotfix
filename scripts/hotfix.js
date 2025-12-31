@@ -116,7 +116,7 @@ function pickTargetRepoForPluginError(payload) {
   if (bySourceRepoAlt) return bySourceRepoAlt;
 
   const byId = String(payload?.plugin?.id ?? "");
-  const m = byId.match(/^([0-9A-Za-z_.-]+)\\/([0-9A-Za-z_.-]+)(?:@.+)?$/);
+  const m = byId.match(/^([0-9A-Za-z_.-]+)\/([0-9A-Za-z_.-]+)(?:@.+)?$/);
   if (m) return normalizeRepoName(`${m[1]}/${m[2]}`);
 
   return "";
@@ -350,4 +350,3 @@ function main() {
 }
 
 main();
-
