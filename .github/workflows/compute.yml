@@ -38,6 +38,9 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install dependencies
+        run: npm install --no-fund --no-audit
+
       - name: Decompress event payload
         uses: ubiquity-os/compress-action@main
         id: eventPayload
@@ -57,5 +60,4 @@ jobs:
           SETTINGS: ${{ inputs.settings }}
           STATE_ID: ${{ inputs.stateId }}
         run: |
-          node scripts/hotfix.js
-
+          npx tsx scripts/hotfix.ts

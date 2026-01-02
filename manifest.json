@@ -37,10 +37,6 @@
           "type": "string"
         }
       },
-      "dedupeWindowHours": {
-        "type": "number",
-        "default": 24
-      },
       "maxBodyChars": {
         "type": "integer",
         "default": 65000
