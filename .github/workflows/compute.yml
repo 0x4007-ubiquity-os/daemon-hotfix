@@ -52,6 +52,20 @@ jobs:
         run: |
           echo "::add-mask::${{ inputs.authToken }}"
 
+      - name: Persist kernel.plugin_error payload
+        if: ${{ inputs.eventName == 'kernel.plugin_error' }}
+        env:
+          EVENT_PAYLOAD: ${{ steps.eventPayload.outputs.result }}
+        run: |
+          printf '%s' "$EVENT_PAYLOAD" > kernel-plugin-error.json
+
+      - name: Upload kernel.plugin_error payload
+        if: ${{ inputs.eventName == 'kernel.plugin_error' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: kernel-plugin-error-${{ inputs.stateId }}
+          path: kernel-plugin-error.json
+
       - name: Run
         env:
           GH_TOKEN: ${{ inputs.authToken }}
